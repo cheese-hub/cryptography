@@ -19,7 +19,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta http-equiv="last-modified" content="2019-08-06 17:45:56 -0500">
+    <meta http-equiv="last-modified" content="2019-08-07 15:59:42 -0500">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- meta "search-domain" used for google site search function google_search() -->
     <meta name="search-domain" value="">
@@ -282,7 +282,7 @@ The learning objective of this lab is for students to gain the first-hand experi
 </ul>
 
 <h3 id="lab-tasks">Lab Tasks</h3>
-<h4 id="becoming-a-certificate-authority-ca">Becoming a Certificate Authority (CA)</h4>
+<h4 id="task1-becoming-a-certificate-authority-ca">Task1: Becoming a Certificate Authority (CA)</h4>
 <p>A Certificate Authority (CA) is a trusted entity that issues digital certificates. The digital certificate certifies the ownership of a public key by the named subject of the certificate. In this lab, we need to create digital certificates, but we are not going to pay any commercial CA. We will become a root CA ourselves and then use this CA to issue certificate for others. Unlike other certificates, which are usually signed by another CA, the root CA’s certificates are self-signed. Root CA’s certificates are usually pre-loaded into most operating systems, web browsers, and other software that rely on PKI. Root CA’s certificates are unconditionally trusted.</p>
 <h4 id="the-configuration-file-opensslcnf">The configuration file (openssl.cnf)</h4>
 <p>In order to use OpenSSL to create certificates, you have to have a configuration file. The configuration file usually has an extension .cnf. It is used by three OpenSSL commands: ca, req and x509. The configuration file is located in <strong>/usr/lib/ssl/openssl.cnf</strong> however, openssl.cnf has already been copied to <strong>/home/user/demoCA/openssl.cnf</strong> in the container. Openssl requires the following sub-directories however, the configuration has already been completed in the container.</p>
@@ -310,7 +310,7 @@ Run the following command in the <strong>demoCA</strong> directory to generate a
 </code></pre></div></div>
 <p>You will be prompted for information and a password. <strong>Do not lose this password</strong>, because you will have to type the passphrase each time you want to use this CA to sign certificates for others. You will also be asked to fill in some information, such as the Country Name, Common Name, etc. The output of the command are stored in two files: <strong>ca.key</strong> and <strong>ca.crt</strong>. The file <strong>ca.key</strong> contains the CA’s <strong>private key</strong>, while <strong>ca.crt</strong> contains the <strong>public-key certificate</strong>.</p>
 
-<h4 id="creating-a-certificate-for-seedpkilab2018com">Creating a Certificate for SEEDPKILab2018.com</h4>
+<h4 id="task2-creating-a-certificate-for-seedpkilab2018com">Task2: Creating a Certificate for SEEDPKILab2018.com</h4>
 <p>Now that we have become a root CA, we are ready to sign digital certificates for our customers. Our first customer is a company called SEEDPKILab2018.com. In order for this company to get a digital certificate from a CA, it needs to go through three steps.</p>
 <h5 id="step-1-generate-publicprivate-key-pair">Step 1: Generate public/private key pair</h5>
 <p>The company needs to first create its own public/private key pair. We can run the following command to generate an RSA key pair (both private and public keys). You will also be required to provide a password to encrypt the private key (using the AES-128 encryption algorithm, as is specified in the command option). The keys will be stored in the file server.key:</p>
@@ -326,6 +326,130 @@ content, such as the modulus, private exponents, etc. To see those, you can run 
 </code></pre></div></div>
 <p>It should be noted that the above command is quite similar to the one we used in creating the self-signed certificate for the CA. The only difference is the <em>-x509</em> option. Without it, the command generates a request; with it, the command generates a self-signed certificate.</p>
 
+<h5 id="step-3-generating-certificates">Step 3: Generating Certificates</h5>
+<p>The CSR file needs to have the CA’s signature to form a certificate. In the real world, the CSR files are usually sent to a trusted CA for their signature. In this lab, we will use our own trusted CA to generate certificates. The following command turns the certificate signing request (<strong>server.csr</strong>) into an X509 certificate (<strong>server.crt</strong>), using the CA’s <strong>ca.crt</strong> and <strong>ca.key</strong>:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>openssl ca <span class="nt">-in</span> server.csr <span class="nt">-out</span> server.crt <span class="nt">-cert</span> ca.crt <span class="nt">-keyfile</span> ca.key <span class="nt">-config</span> openssl.cnf
+</code></pre></div></div>
+
+<p>If OpenSSL refuses to generate certificates, it is very likely that the names in your requests do not match with those of CA. The matching rules are specified in the configuration file ( In <strong>openssl.cnf</strong> look at the [policy match] section). You can change the names of your requests to comply with the policy, or you can change the policy. The configuration file also includes another policy (called <strong>policy anything</strong>), which is less restrictive. You can choose that policy by changing the following line: (<strong>vim</strong> is available in the container).</p>
+<div class="source highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"policy = policy_match"  change to "policy = policy_anything".
+</code></pre></div></div>
+
+<h4 id="task3-deploying-certificate-in-an-https-web-server">Task3: Deploying Certificate in an HTTPS Web Server</h4>
+<p>In this task, we will explore how public-key certificates are used by websites to secure web browsing. We will set up an HTTPS website using openssl’s built-in web server.</p>
+<h5 id="step-1-configuring-dns">Step 1: Configuring DNS</h5>
+<p>We choose <strong>SEEDPKILab2018.com</strong> as the name of our website. To get our computers recognize this name, let us add the following entry to /etc/hosts; this entry basically maps the hostname SEEDPKILab2018.com to our localhost (i.e., <strong>127.0.0.1</strong>):<br />
+Edit the /etc/hosts file by typing in the following command.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>vim /etc/hosts
+</code></pre></div></div>
+<p>Add the following entries to the /etc/hosts file.</p>
+
+<pre><code class="language-source">127.0.0.1  SEEDPKILab2018.com
+</code></pre>
+<h5 id="step-2-configuring-the-web-server">Step 2: Configuring the web server</h5>
+<p>Let us launch a simple web server with the certificate generated in the previous task. OpenSSL allows us to start a simple web server using the <strong><em>s_server</em></strong> command:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Combine the secret key and certificate into one file</span>
+<span class="nb">cp </span>server.key server.pem
+<span class="nb">cat </span>server.crt <span class="o">&gt;&gt;</span> server.pem
+<span class="c"># Launch the web server using server.pem</span>
+openssl s_server <span class="nt">-cert</span> server.pem <span class="nt">-www</span>
+</code></pre></div></div>
+
+<p>By default, the server will listen on port <strong>4433</strong>. You can alter that using the <strong><em>-accept</em></strong> option. Now, you can access the server using the following URL.</p>
+<pre><code class="language-source">https://SEEDPKILab2018.com:4433
+</code></pre>
+<p>Most likely, you will get an error message from the browser. In Firefox, you will see a message like the following:</p>
+
+<pre><code class="language-source">seedpkilab2018.com:4433 uses an invalid security certificate. The certificate is not trusted because the issuer certificate is unknown
+</code></pre>
+
+<h5 id="step-3-getting-the-browser-to-accept-our-ca-certificate">Step 3: Getting the browser to accept our CA certificate</h5>
+<p>Had our certificate been assigned by VeriSign, we will not have such an error message because VeriSign’s certificate is very likely preloaded into Firefox’s certificate repository. Unfortunately, the certificate of SEEDPKILab2018.com is signed by our own CA (i.e., using ca.crt), and this CA is not recognized by Firefox. There are two ways to get Firefox to accept our CA’s self-signed certificate.</p>
+<ul>
+  <li>We can request Mozilla to include our CA’s certificate in its Firefox software, so everybody using Firefox can recognize our CA. This is how the real CAs, such as VeriSign, get their certificates into Firefox. Unfortunately, our own CA does not have a large enough market for Mozilla to include our certificate, so we will not pursue this direction.</li>
+  <li>Load <strong>ca.crt</strong> into Firefox: We can manually add our CA’s certificate to the Firefox browser by clicking the following menu sequence:</li>
+</ul>
+
+<pre><code class="language-source">Edit -&gt; Preference -&gt; Privacy &amp; Security -&gt; View Certificates
+</code></pre>
+<p>You will see a list of certificates that are already accepted by Firefox. From here, we can “import” our own certificate.<br />
+Please import <strong>ca.crt</strong>, and select the following option:</p>
+<pre><code class="language-source">Trust this CA to identify web sites. 
+</code></pre>
+<p>You will see that our CA’s certificate is now in Firefox’s list of the accepted certificates.</p>
+
+<h5 id="step-4-testing-our-https-website">Step 4: Testing our HTTPS website</h5>
+<p>Now, point the browser to <strong>https://SEEDPKILab2018.com: 4433</strong>. 
+Please also do the following tasks:</p>
+<ul>
+  <li>Modify a single byte of server.pem, restart the server, and reload the URL. What do you observe? Make sure you restore the original server.pem afterward. <em>Note: the server may not be able to restart if certain places of server.pem is corrupted; in that case, choose another place to modify.</em></li>
+  <li>Since SEEDPKILab2018.com points to the localhost, if we use <strong><em>https://localhost:4433</em></strong> instead, we will be connecting to the same web server.</li>
+</ul>
+
+<h4 id="task-4-deploying-certificate-in-an-apache-based-https-website">Task 4: Deploying Certificate in an Apache-Based HTTPS Website</h4>
+<p>The HTTPS server setup using openssl’s <em>s_server</em> command is primarily for debugging and demonstration purposes. In this task, we will set up a real HTTPS web server based on Apache. The Apache server, which is already installed in our container, supports the HTTPS protocol. To create an HTTPS website, we just need to configure the Apache server, so it knows where to get the private key and certificates. We give an example in the following to show how to enable HTTPS for a website <strong><em>www.example.com</em></strong>. <br />
+Your task is to do the same for SEEDPKILab2018.com using the certificate generated from previous tasks.
+An Apache server can simultaneously host multiple websites. An Apache server can simultaneously host multiple websites. It needs to know the directory where website’s files are stored. This is done via its VirtualHost file, located in the <strong>/etc/apache2/sites-available</strong> directory.<br />
+To add an HTTP website, we add a VirtualHost entry to the file <strong>000-default.conf</strong>. See the following example.</p>
+<div class="source highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;VirtualHost *:80&gt;
+    ServerName one.example.com
+    DocumentRoot /var/www/Example_One
+    DirectoryIndex index.html
+&lt;/VirtualHost&gt;
+</code></pre></div></div>
+<p>To add an HTTPS website, we need to add a VirtualHost entry to the default-ssl.conf file in the same folder.
+You will be able to modify the default-ssl.conf file by typing in:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>vim /etc/apache2/sites-available/default-ssl.conf
+</code></pre></div></div>
+<div class="source highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;VirtualHost *:443&gt;
+    	ServerName two.example.com
+    	DocumentRoot /var/www/Example_Two
+	DirectoryIndex index.html
+	SSLEngine On
+	SSLCertificateFile /etc/apache2/ssl/example_cert.pem 􏰀 
+	SSLCertificateKeyFile /etc/apache2/ssl/example_key.pem 􏰁
+&lt;/VirtualHost&gt;
+</code></pre></div></div>
+<p>The <strong>ServerName</strong> entry specifies the name of the website, while the DocumentRoot entry specifies where the files for the website are stored. The above example sets up the HTTPS site <strong>https://two. example.com</strong> (<strong>port 443</strong> is the default HTTPS port). <br />
+In the setup, we need to tell Apache where the server certificate (<strong>SSLCertificateFile</strong>) and private key (<strong>SSLCertificateKeyFile</strong>􏰁) are stored.<br />
+After the default-ssl.conf file is modified, we need to run a series of commands to enable SSL. Apache will ask us to type the password used for encrypting the private key. Once everything is set up properly, we can browse the web site, and all the traffic between the browser and the server will be encrypted.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Start the Apache server</span>
+<span class="nb">sudo </span>service apache2 start 
+<span class="c"># Test the Apache configuration file for errors</span>
+<span class="nb">sudo </span>apachectl configtest
+<span class="c"># Enable the SSL module</span>
+<span class="nb">sudo </span>a2enmod ssl
+<span class="c"># Enable the site we have just edited</span>
+<span class="nb">sudo </span>a2ensite default-ssl
+<span class="c"># Restart Apache</span>
+<span class="nb">sudo </span>service apache2 restart
+</code></pre></div></div>
+<p>Please use the above example as guidance to set up an HTTPS server for <strong>SEEDPKILab2018.com</strong>.</p>
+<blockquote class="callout">
+  <h2 id="apache-https-configuration">Apache HTTPS Configuration</h2>
+  <p>A HTML file named <strong>index.html</strong> has already been placed in the directory named <strong>/var/www/crypto</strong><br />
+Please use them when configuring HTTPS.</p>
+</blockquote>
+<h4 id="task-5-launching-a-man-in-the-middle-attack">Task 5: Launching a Man-In-The-Middle Attack</h4>
+<p>In this task, we will show how PKI can defeat Man-In-The-Middle (MITM) attacks. The following figure depicts how MITM attacks work. 
+<img src="../fig/pki/MITM.png" alt="mitm" />
+Assume Alice wants to visit example.com via the HTTPS protocol. She needs to get the public key from the example.com server; Alice will generate a secret, and encrypt the secret using the server’s public key, and send it to the server. If an attacker can intercept the communication between Alice and the server, the attacker can replace the server’s public key with its own public key. Therefore, Alice’s secret is actually encrypted with the attacker’s public key, so the attacker will be able to read the secret. The attacker can forward the secret to the server using the server’s public key. The secret is used to encrypt the communication between Alice and server, so the attacker can decrypt the encrypted communication.<br />
+The goal of this task is to help students understand how PKI can defeat such MITM attacks. In the task, we will emulate an MITM attack, and see how exactly PKI can defeat it. We will select a target website first. In this document, we use <strong>example.com</strong> as the target website.</p>
+
+<h5 id="step-1-setting-up-the-malicious-website">Step 1: Setting up the malicious website</h5>
+<p>In Task 4, we have already set up an HTTPS website for SEEDPKILab2018.com. We will use the same Apache server to impersonate example.com. To achieve that, we will follow the instruction in Task 4 to add a VirtualHost entry to Apache’s SSL configuration file: the ServerName should be example.com, but the rest of the configuration can be the same as those used in Task 4. Our goal is the following: when a user tries to visit example.com, we are going to get the user to land in our server, which hosts a fake website for example.com. If this were a social network website, the fake site can display a login page similar to the one in the target website. If the users cannot tell the difference, they may type their account credentials in the fake webpage; essentially disclosing the credentials to the attacker.</p>
+
+<h5 id="step-2-becoming-the-man-in-the-middle">Step 2: Becoming the man in the middle</h5>
+<p>There are several ways to get the user’s HTTPS request to land in our web server. One way is to attack the routing, so the user’s HTTPS request is routed to our web server. Another way is to attack DNS, so when the victim’s machine tries to find out the IP address of the target web server, it gets the IP address of our web server. In this task, we will attack the DNS by modifying the <strong>/etc/hosts</strong> file.</p>
+<pre><code class="language-source">&lt;IP_Address&gt;  example.com
+</code></pre>
+<h5 id="step-3-browse-the-target-website">Step 3: Browse the target website</h5>
+<p>With everything set up, now visit the target real website, and see what your browser would say.</p>
+
+<h4 id="task-6-launching-a-man-in-the-middle-attack-with-a-compromised-ca">Task 6: Launching a Man-In-The-Middle Attack with a Compromised CA</h4>
+<p>Unfortunately, the root CA that we created in Task 1 is compromised by an attacker, and its private key is stolen. Therefore, the attacker can generate any arbitrary certificate using this CA’s private key. In this task, we will see the consequence of such a compromise. Please design an experiment to show that the attacker can successfully launch MITM attacks on any HTTPS website. You can use the same setting created in Task 5, but this time, you need to demonstrate that the MITM attack is successful, i.e., the browser will not raise any suspicion when the victim tries to visit a website but land in the MITM attacker’s fake website. <br />
+<strong><em>Hint: you will need to create a certificate for example.com using the CA’s private/public key (The CA is compromised).</em></strong></p>
+
 
 
 <blockquote class="keypoints">
@@ -333,6 +457,12 @@ content, such as the modulus, private exponents, etc. To see those, you can run 
   <ul>
     
     <li><p>OpenSSL and Apache web server has already been installed in the container.</p>
+</li>
+    
+    <li><p>All of the sudo command needs to be launched from the user’s home directory!!</p>
+</li>
+    
+    <li><p>User will be able to edit files using vim.</p>
 </li>
     
   </ul>
