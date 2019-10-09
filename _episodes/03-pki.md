@@ -38,7 +38,8 @@ A Certificate Authority (CA) is a trusted entity that issues digital certificate
 In order to use OpenSSL to create certificates, you have to have a configuration file. The configuration file usually has an extension .cnf. It is used by three OpenSSL commands: ca, req and x509. The configuration file is located in **/usr/lib/ssl/openssl.cnf** however, openssl.cnf has already been copied to **/home/user/demoCA/openssl.cnf** in the container. Openssl requires the following sub-directories however, the configuration has already been completed in the container. 
 ``` source
 dir             = ./demoCA        # Where everything is kept
-certs           = $dir/certs      # Where the issued certs are keptcrl_dir	        = $dir/crl        # Where the issued crl are kept
+certs           = $dir/certs      # Where the issued certs are kept
+crl_dir	        = $dir/crl        # Where the issued crl are kept
 new_certs_dir   = $dir/newcerts   # default place for new certs.
 database        = $dir/index.txt  # database index file.
 serial          = $dir/serial     # The current serial number
@@ -53,18 +54,30 @@ For the index.txt file, an empty file has been created. For the serial file, a s
 
 #### Certificate Authority (CA)
 As we described before, we need to generate a self-signed certificate for our CA. This means that this CA is totally trusted, and its certificate will serve as the root certificate.  
-Run the following command in the **demoCA** directory to generate a self-signed certificate for the CA:
+Run the following command in the **demoCA** directory to generate a self-signed certificate for the CA:   
 
+~~~
+cd demoCA
+~~~
+{: .language-bash}
 ~~~
 openssl req -new -x509 -keyout ca.key -out ca.crt -config openssl.cnf
 ~~~
 {: .language-bash}
-You will be prompted for information and a password. **Do not lose this password**, because you will have to type the passphrase each time you want to use this CA to sign certificates for others. You will also be asked to fill in some information, such as the Country Name, Common Name, etc. The output of the command are stored in two files: **ca.key** and **ca.crt**. The file **ca.key** contains the CA’s **private key**, while **ca.crt** contains the **public-key certificate**.
+You will be prompted for information and a password. **Do not lose this password**, because you will have to type the passphrase each time you want to use this CA to sign certificates for others. You will also be asked to fill in some information, such as the Country Name, Common Name, etc. The output of the command are stored in two files: **ca.key** and **ca.crt**. The file **ca.key** contains the CA’s **private key**, while **ca.crt** contains the **public-key certificate**.  
+
+> ## Common Name 
+> The common name **must** be SEEDPKILab2018.com for the purpose of this lab. 
+{: .callout}
 
 #### Task2: Creating a Certificate for SEEDPKILab2018.com
 Now that we have become a root CA, we are ready to sign digital certificates for our customers. Our first customer is a company called SEEDPKILab2018.com. In order for this company to get a digital certificate from a CA, it needs to go through three steps.  
 ##### Step 1: Generate public/private key pair 
-The company needs to first create its own public/private key pair. We can run the following command to generate an RSA key pair (both private and public keys). You will also be required to provide a password to encrypt the private key (using the AES-128 encryption algorithm, as is specified in the command option). The keys will be stored in the file server.key:
+The company needs to first create its own public/private key pair. We can run the following command in the **user's home directory** in order to generate an RSA key pair (both private and public keys). You will also be required to provide a password to encrypt the private key (using the AES-128 encryption algorithm, as is specified in the command option). The keys will be stored in the file server.key:  
+~~~
+cd ~
+~~~
+{: .language-bash}
 ~~~
 openssl genrsa -aes128 -out server.key 1024
 ~~~
@@ -78,7 +91,7 @@ openssl rsa -in server.key -text
 ##### Step 2: Generate a Certificate Signing Request (CSR)
 Once the company has the key file, it should generates a Certificate Signing Request (CSR), which basically includes the company’s public key. The CSR will be sent to the CA, who will generate a certificate for the key (usually after ensuring that identity information in the CSR matches with the server’s true identity). Please use **SEEDPKILab2018.com** as the common name of the certificate request.
 ~~~
-openssl req -new -key server.key -out server.csr -config openssl.cnf
+openssl req -new -key server.key -out server.csr -config demoCA/openssl.cnf
 ~~~
 {: .language-bash}
 It should be noted that the above command is quite similar to the one we used in creating the self-signed certificate for the CA. The only difference is the *-x509* option. Without it, the command generates a request; with it, the command generates a self-signed certificate.
@@ -86,7 +99,7 @@ It should be noted that the above command is quite similar to the one we used in
 ##### Step 3: Generating Certificates
 The CSR file needs to have the CA’s signature to form a certificate. In the real world, the CSR files are usually sent to a trusted CA for their signature. In this lab, we will use our own trusted CA to generate certificates. The following command turns the certificate signing request (**server.csr**) into an X509 certificate (**server.crt**), using the CA’s **ca.crt** and **ca.key**:
 ~~~
-openssl ca -in server.csr -out server.crt -cert ca.crt -keyfile ca.key -config openssl.cnf
+openssl ca -in server.csr -out server.crt -cert demoCA/ca.crt -keyfile demoCA/ca.key -config demoCA/openssl.cnf
 ~~~
 {: .language-bash}
 
@@ -152,7 +165,13 @@ Please also do the following tasks:
 - Modify a single byte of server.pem, restart the server, and reload the URL. What do you observe? Make sure you restore the original server.pem afterward. *Note: the server may not be able to restart if certain places of server.pem is corrupted; in that case, choose another place to modify.*
 - Since SEEDPKILab2018.com points to the localhost, if we use ***https://localhost:4433*** instead, we will be connecting to the same web server.
 
-#### Task 4: Deploying Certificate in an Apache-Based HTTPS Website
+#### Task 4: Deploying Certificate in an Apache-Based HTTPS Website  
+
+> ## Apache HTTPS Configuration
+> A HTML file named **index.html** has already been placed in the directory named **/var/www/crypto**  
+> Please use them when configuring HTTPS.
+{: .callout}  
+
 The HTTPS server setup using openssl’s *s_server* command is primarily for debugging and demonstration purposes. In this task, we will set up a real HTTPS web server based on Apache. The Apache server, which is already installed in our container, supports the HTTPS protocol. To create an HTTPS website, we just need to configure the Apache server, so it knows where to get the private key and certificates. We give an example in the following to show how to enable HTTPS for a website ***www.example.com***.   
 Your task is to do the same for SEEDPKILab2018.com using the certificate generated from previous tasks.
 An Apache server can simultaneously host multiple websites. An Apache server can simultaneously host multiple websites. It needs to know the directory where website’s files are stored. This is done via its VirtualHost file, located in the **/etc/apache2/sites-available** directory.  
@@ -161,7 +180,8 @@ To add an HTTP website, we add a VirtualHost entry to the file **000-default.con
 <VirtualHost *:80>
     ServerName one.example.com
     DocumentRoot /var/www/Example_One
-    DirectoryIndex index.html</VirtualHost>
+    DirectoryIndex index.html
+</VirtualHost>
 ~~~
 {: .source}
 To add an HTTPS website, we need to add a VirtualHost entry to the default-ssl.conf file in the same folder.
@@ -173,7 +193,8 @@ sudo vim /etc/apache2/sites-available/default-ssl.conf
 ~~~
 <VirtualHost *:443>
     	ServerName two.example.com
-    	DocumentRoot /var/www/Example_Two	DirectoryIndex index.html
+    	DocumentRoot /var/www/Example_Two
+	DirectoryIndex index.html
 	SSLEngine On
 	SSLCertificateFile /etc/apache2/ssl/example_cert.pem 􏰀 
 	SSLCertificateKeyFile /etc/apache2/ssl/example_key.pem 􏰁
@@ -182,24 +203,21 @@ sudo vim /etc/apache2/sites-available/default-ssl.conf
 {: .source}
 The **ServerName** entry specifies the name of the website, while the DocumentRoot entry specifies where the files for the website are stored. The above example sets up the HTTPS site **https://two. example.com** (**port 443** is the default HTTPS port).   
 In the setup, we need to tell Apache where the server certificate (**SSLCertificateFile**) and private key (**SSLCertificateKeyFile**􏰁) are stored.  
-After the default-ssl.conf file is modified, we need to run a series of commands to enable SSL. Apache will ask us to type the password used for encrypting the private key. Once everything is set up properly, we can browse the web site, and all the traffic between the browser and the server will be encrypted.
+After the default-ssl.conf file is modified, we need to run a series of commands to enable SSL. Apache will ask us to type the password used for encrypting the private key. Once everything is set up properly, we can browse the web site, and all the traffic between the browser and the server will be encrypted. Please use the above example as guidance to set up an HTTPS server for **SEEDPKILab2018.com**.
 ~~~
 # Start the Apache server
 sudo service apache2 start 
 # Test the Apache configuration file for errors
 sudo apachectl configtest
 # Enable the SSL module
-sudo a2enmod ssl# Enable the site we have just edited
+sudo a2enmod ssl
+# Enable the site we have just edited
 sudo a2ensite default-ssl
 # Restart Apache
 sudo service apache2 restart
 ~~~
 {: .language-bash}
-Please use the above example as guidance to set up an HTTPS server for **SEEDPKILab2018.com**.
-> ## Apache HTTPS Configuration
-> A HTML file named **index.html** has already been placed in the directory named **/var/www/crypto**  
-> Please use them when configuring HTTPS.
-{: .callout}
+
 #### Task 5: Launching a Man-In-The-Middle Attack
 In this task, we will show how PKI can defeat Man-In-The-Middle (MITM) attacks. The following figure depicts how MITM attacks work. 
 ![mitm]({{ page.root }}/fig/pki/MITM.png)

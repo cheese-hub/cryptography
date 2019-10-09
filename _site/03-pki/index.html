@@ -19,7 +19,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta http-equiv="last-modified" content="2019-08-07 15:59:42 -0500">
+    <meta http-equiv="last-modified" content="2019-10-09 15:51:28 -0500">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- meta "search-domain" used for google site search function google_search() -->
     <meta name="search-domain" value="">
@@ -306,14 +306,23 @@ openssl.cnf file.</p>
 <p>As we described before, we need to generate a self-signed certificate for our CA. This means that this CA is totally trusted, and its certificate will serve as the root certificate.<br />
 Run the following command in the <strong>demoCA</strong> directory to generate a self-signed certificate for the CA:</p>
 
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>demoCA
+</code></pre></div></div>
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>openssl req <span class="nt">-new</span> <span class="nt">-x509</span> <span class="nt">-keyout</span> ca.key <span class="nt">-out</span> ca.crt <span class="nt">-config</span> openssl.cnf
 </code></pre></div></div>
 <p>You will be prompted for information and a password. <strong>Do not lose this password</strong>, because you will have to type the passphrase each time you want to use this CA to sign certificates for others. You will also be asked to fill in some information, such as the Country Name, Common Name, etc. The output of the command are stored in two files: <strong>ca.key</strong> and <strong>ca.crt</strong>. The file <strong>ca.key</strong> contains the CA’s <strong>private key</strong>, while <strong>ca.crt</strong> contains the <strong>public-key certificate</strong>.</p>
 
+<blockquote class="callout">
+  <h2 id="common-name">Common Name</h2>
+  <p>The common name <strong>must</strong> be SEEDPKILab2018.com for the purpose of this lab.</p>
+</blockquote>
+
 <h4 id="task2-creating-a-certificate-for-seedpkilab2018com">Task2: Creating a Certificate for SEEDPKILab2018.com</h4>
 <p>Now that we have become a root CA, we are ready to sign digital certificates for our customers. Our first customer is a company called SEEDPKILab2018.com. In order for this company to get a digital certificate from a CA, it needs to go through three steps.</p>
 <h5 id="step-1-generate-publicprivate-key-pair">Step 1: Generate public/private key pair</h5>
-<p>The company needs to first create its own public/private key pair. We can run the following command to generate an RSA key pair (both private and public keys). You will also be required to provide a password to encrypt the private key (using the AES-128 encryption algorithm, as is specified in the command option). The keys will be stored in the file server.key:</p>
+<p>The company needs to first create its own public/private key pair. We can run the following command in the <strong>user’s home directory</strong> in order to generate an RSA key pair (both private and public keys). You will also be required to provide a password to encrypt the private key (using the AES-128 encryption algorithm, as is specified in the command option). The keys will be stored in the file server.key:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> ~
+</code></pre></div></div>
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>openssl genrsa <span class="nt">-aes128</span> <span class="nt">-out</span> server.key 1024
 </code></pre></div></div>
 <p>The server.key is an encoded text file (also encrypted), so you will not be able to see the actual
@@ -322,13 +331,13 @@ content, such as the modulus, private exponents, etc. To see those, you can run 
 </code></pre></div></div>
 <h5 id="step-2-generate-a-certificate-signing-request-csr">Step 2: Generate a Certificate Signing Request (CSR)</h5>
 <p>Once the company has the key file, it should generates a Certificate Signing Request (CSR), which basically includes the company’s public key. The CSR will be sent to the CA, who will generate a certificate for the key (usually after ensuring that identity information in the CSR matches with the server’s true identity). Please use <strong>SEEDPKILab2018.com</strong> as the common name of the certificate request.</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>openssl req <span class="nt">-new</span> <span class="nt">-key</span> server.key <span class="nt">-out</span> server.csr <span class="nt">-config</span> openssl.cnf
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>openssl req <span class="nt">-new</span> <span class="nt">-key</span> server.key <span class="nt">-out</span> server.csr <span class="nt">-config</span> demoCA/openssl.cnf
 </code></pre></div></div>
 <p>It should be noted that the above command is quite similar to the one we used in creating the self-signed certificate for the CA. The only difference is the <em>-x509</em> option. Without it, the command generates a request; with it, the command generates a self-signed certificate.</p>
 
 <h5 id="step-3-generating-certificates">Step 3: Generating Certificates</h5>
 <p>The CSR file needs to have the CA’s signature to form a certificate. In the real world, the CSR files are usually sent to a trusted CA for their signature. In this lab, we will use our own trusted CA to generate certificates. The following command turns the certificate signing request (<strong>server.csr</strong>) into an X509 certificate (<strong>server.crt</strong>), using the CA’s <strong>ca.crt</strong> and <strong>ca.key</strong>:</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>openssl ca <span class="nt">-in</span> server.csr <span class="nt">-out</span> server.crt <span class="nt">-cert</span> ca.crt <span class="nt">-keyfile</span> ca.key <span class="nt">-config</span> openssl.cnf
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>openssl ca <span class="nt">-in</span> server.csr <span class="nt">-out</span> server.crt <span class="nt">-cert</span> demoCA/ca.crt <span class="nt">-keyfile</span> demoCA/ca.key <span class="nt">-config</span> demoCA/openssl.cnf
 </code></pre></div></div>
 
 <p>If OpenSSL refuses to generate certificates, it is very likely that the names in your requests do not match with those of CA. The matching rules are specified in the configuration file ( In <strong>openssl.cnf</strong> look at the [policy match] section). You can change the names of your requests to comply with the policy, or you can change the policy. The configuration file also includes another policy (called <strong>policy anything</strong>), which is less restrictive. You can choose that policy by changing the following line: (<strong>vim</strong> is available in the container).</p>
@@ -387,6 +396,13 @@ Please also do the following tasks:</p>
 </ul>
 
 <h4 id="task-4-deploying-certificate-in-an-apache-based-https-website">Task 4: Deploying Certificate in an Apache-Based HTTPS Website</h4>
+
+<blockquote class="callout">
+  <h2 id="apache-https-configuration">Apache HTTPS Configuration</h2>
+  <p>A HTML file named <strong>index.html</strong> has already been placed in the directory named <strong>/var/www/crypto</strong><br />
+Please use them when configuring HTTPS.</p>
+</blockquote>
+
 <p>The HTTPS server setup using openssl’s <em>s_server</em> command is primarily for debugging and demonstration purposes. In this task, we will set up a real HTTPS web server based on Apache. The Apache server, which is already installed in our container, supports the HTTPS protocol. To create an HTTPS website, we just need to configure the Apache server, so it knows where to get the private key and certificates. We give an example in the following to show how to enable HTTPS for a website <strong><em>www.example.com</em></strong>. <br />
 Your task is to do the same for SEEDPKILab2018.com using the certificate generated from previous tasks.
 An Apache server can simultaneously host multiple websites. An Apache server can simultaneously host multiple websites. It needs to know the directory where website’s files are stored. This is done via its VirtualHost file, located in the <strong>/etc/apache2/sites-available</strong> directory.<br />
@@ -412,7 +428,7 @@ You will be able to modify the default-ssl.conf file by typing in:</p>
 </code></pre></div></div>
 <p>The <strong>ServerName</strong> entry specifies the name of the website, while the DocumentRoot entry specifies where the files for the website are stored. The above example sets up the HTTPS site <strong>https://two. example.com</strong> (<strong>port 443</strong> is the default HTTPS port). <br />
 In the setup, we need to tell Apache where the server certificate (<strong>SSLCertificateFile</strong>) and private key (<strong>SSLCertificateKeyFile</strong>􏰁) are stored.<br />
-After the default-ssl.conf file is modified, we need to run a series of commands to enable SSL. Apache will ask us to type the password used for encrypting the private key. Once everything is set up properly, we can browse the web site, and all the traffic between the browser and the server will be encrypted.</p>
+After the default-ssl.conf file is modified, we need to run a series of commands to enable SSL. Apache will ask us to type the password used for encrypting the private key. Once everything is set up properly, we can browse the web site, and all the traffic between the browser and the server will be encrypted. Please use the above example as guidance to set up an HTTPS server for <strong>SEEDPKILab2018.com</strong>.</p>
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Start the Apache server</span>
 <span class="nb">sudo </span>service apache2 start 
 <span class="c"># Test the Apache configuration file for errors</span>
@@ -424,12 +440,7 @@ After the default-ssl.conf file is modified, we need to run a series of commands
 <span class="c"># Restart Apache</span>
 <span class="nb">sudo </span>service apache2 restart
 </code></pre></div></div>
-<p>Please use the above example as guidance to set up an HTTPS server for <strong>SEEDPKILab2018.com</strong>.</p>
-<blockquote class="callout">
-  <h2 id="apache-https-configuration">Apache HTTPS Configuration</h2>
-  <p>A HTML file named <strong>index.html</strong> has already been placed in the directory named <strong>/var/www/crypto</strong><br />
-Please use them when configuring HTTPS.</p>
-</blockquote>
+
 <h4 id="task-5-launching-a-man-in-the-middle-attack">Task 5: Launching a Man-In-The-Middle Attack</h4>
 <p>In this task, we will show how PKI can defeat Man-In-The-Middle (MITM) attacks. The following figure depicts how MITM attacks work. 
 <img src="../fig/pki/MITM.png" alt="mitm" />
