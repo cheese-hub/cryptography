@@ -1,0 +1,711 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="last-modified" content="2019-10-09 15:51:28 -0500">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- meta "search-domain" used for google site search function google_search() -->
+    <meta name="search-domain" value="">
+    <link rel="stylesheet" type="text/css" href="../assets/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="../assets/css/bootstrap-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../assets/css/lesson.css" />
+    <link rel="stylesheet" type="text/css" href="../assets/css/syntax.css" />
+
+    
+
+
+
+    <!-- Favicons for everyone -->
+    <link rel="apple-touch-icon-precomposed" sizes="57x57" href="../assets/favicons/swc/apple-touch-icon-57x57.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/favicons/swc/apple-touch-icon-114x114.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/favicons/swc/apple-touch-icon-72x72.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/favicons/swc/apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="60x60" href="../assets/favicons/swc/apple-touch-icon-60x60.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="../assets/favicons/swc/apple-touch-icon-120x120.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="76x76" href="../assets/favicons/swc/apple-touch-icon-76x76.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../assets/favicons/swc/apple-touch-icon-152x152.png" />
+    <link rel="icon" type="image/png" href="../assets/favicons/swc/favicon-196x196.png" sizes="196x196" />
+    <link rel="icon" type="image/png" href="../assets/favicons/swc/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/png" href="../assets/favicons/swc/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="../assets/favicons/swc/favicon-16x16.png" sizes="16x16" />
+    <link rel="icon" type="image/png" href="../assets/favicons/swc/favicon-128.png" sizes="128x128" />
+    <meta name="application-name" content="Software Carpentry - Network Security"/>
+    <meta name="msapplication-TileColor" content="#FFFFFF" />
+    <meta name="msapplication-TileImage" content="../assets/favicons/swc/mstile-144x144.png" />
+    <meta name="msapplication-square70x70logo" content="../assets/favicons/swc/mstile-70x70.png" />
+    <meta name="msapplication-square150x150logo" content="../assets/favicons/swc/mstile-150x150.png" />
+    <meta name="msapplication-wide310x150logo" content="../assets/favicons/swc/mstile-310x150.png" />
+    <meta name="msapplication-square310x310logo" content="../assets/favicons/swc/mstile-310x310.png" />
+
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+    <title>Network Security: Password Hashing and Cracking</title>
+  </head>
+  <body>
+
+    
+
+
+<div class="panel panel-default life-cycle">
+  <div id="life-cycle" class="panel-body pre-alpha">
+    This lesson is still being designed and assembled (Pre-Alpha version)
+  </div>
+</div>
+
+
+
+
+
+    <div class="container">
+      
+
+
+
+
+
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+
+      
+      
+      <a href="https://software-carpentry.org" class="pull-left">
+        <img class="navbar-logo" src="../assets/img/swc-icon-blue.svg" alt="Software Carpentry logo" />
+      </a>
+      
+
+      
+      <a class="navbar-brand" href="../index.html">Home</a>
+
+    </div>
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+
+	
+        <li><a href="../CODE_OF_CONDUCT.html">Code of Conduct</a></li>
+
+        
+	
+        <li><a href="../setup.html">Setup</a></li>
+
+        
+        <li class="dropdown">
+          <a href="../" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Episodes <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+            <li><a href="../01-passwordcracking/index.html">Password Hashing and Cracking</a></li>
+            
+            <li><a href="../02-rsa/index.html">RSA Public-Key Encryption and Signature Lab</a></li>
+            
+            <li><a href="../03-pki/index.html">Public Key Infrastructure Lab</a></li>
+            
+	    <li role="separator" class="divider"></li>
+            <li><a href="../aio.html">All in one page (Beta)</a></li>
+          </ul>
+        </li>
+	
+
+	
+	
+        <li class="dropdown">
+          <a href="../" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Extras <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="../reference.html">Reference</a></li>
+            
+            <li><a href="../about/index.html">About</a></li>
+            
+            <li><a href="../discuss/index.html">Discussion</a></li>
+            
+            <li><a href="../figures/index.html">Figures</a></li>
+            
+            <li><a href="../guide/index.html">Instructor Notes</a></li>
+            
+          </ul>
+        </li>
+	
+
+	
+        <li><a href="../LICENSE.html">License</a></li>
+	
+	<li><a href="/edit//_episodes/01-passwordcracking.md">Improve this page <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></li>
+	
+      </ul>
+      <form class="navbar-form navbar-right" role="search" id="search" onsubmit="google_search(); return false;">
+        <div class="form-group">
+          <input type="text" id="google-search" placeholder="Search..." aria-label="Google site search">
+        </div>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="row">
+  <div class="col-xs-1">
+    <h3 class="text-left">
+      
+      <a href="../"><span class="glyphicon glyphicon-menu-up" aria-hidden="true"></span><span class="sr-only">lesson home</span></a>
+      
+    </h3>
+  </div>
+  <div class="col-xs-10">
+    
+    <h3 class="maintitle"><a href="../">Network Security</a></h3>
+    
+  </div>
+  <div class="col-xs-1">
+    <h3 class="text-right">
+      
+      <a href="../02-rsa/index.html"><span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span><span class="sr-only">next episode</span></a>
+      
+    </h3>
+  </div>
+</div>
+
+<article>
+<div class="row">
+  <div class="col-md-1">
+  </div>
+  <div class="col-md-10">
+    <h1 class="maintitle">Password Hashing and Cracking</h1>
+  </div>
+  <div class="col-md-1">
+  </div>
+</div>
+
+
+<blockquote class="objectives">
+  <h2>Overview</h2>
+
+  <div class="row">
+    <div class="col-md-3">
+      <strong>Teaching:</strong> 10 min
+      <br/>
+      <strong>Exercises:</strong> 30 min
+    </div>
+    <div class="col-md-9">
+      <strong>Questions</strong>
+      <ul>
+	
+	<li><p>What are Password Hashes?</p>
+</li>
+	
+	<li><p>How can a Password be cracked using John the Ripper?</p>
+</li>
+	
+	<li><p>How are the usernames and passwords being managed in Linux OS?</p>
+</li>
+	
+      </ul>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-3">
+    </div>
+    <div class="col-md-9">
+      <strong>Objectives</strong>
+      <ul>
+	
+	<li><p>Follow instructions to successfully demonstrate some Password Cacking activities</p>
+</li>
+	
+      </ul>
+    </div>
+  </div>
+
+</blockquote>
+
+<h2 id="password-hashing-and-cracking">Password Hashing and Cracking</h2>
+<p>Password is an important user authentication mechanism. Passwords are stored in the database as
+hashes rather than plain text.<br />
+If users’ passwords are stored in a database as plain text, malicious
+hackers can get immediate access to them if they break into the system. In this lab, you will
+understand what password hash is and how password hash be cracked.</p>
+
+<h2 id="password-hashing">Password Hashing</h2>
+<p>A hash function turns any amount of data into a fixed-length “fingerprint” that cannot be reversed.<br />
+The fixed-length “fingerprint” is called a hash value or hash code. 
+The unique feature of hash functions is that any change in input data will result in a completely different hash code. Cryptographic hash functions are used to implement password hashing.There are multiplecryptographic hash functions, such as MD5, SHA-2.</p>
+
+<p>For example, the following are the MD5 hash codes of different strings.<br />
+MD5(“hello”) = “5D41402ABC4B2A76B9719D911017C592”<br />
+MD5(“hollo”) = “181D1F65FC3EDFC75945B24F22CD7E22”<br />
+MD5(“helloo”) = “B373870B9139BBADE83396A49B1AFC9A”</p>
+
+<h3 id="task1-exploring-linux-password-hashes">Task1: Exploring Linux Password Hashes</h3>
+
+<p>The users’ information and passwords in Linux and UNIX operating system are stored in files.
+/etc/passwd stores user accounts, and the /etc/shadow stores the information about user accounts
+and the encrypted password hashes. /etc/shadow has more restrictive permissions than the
+/etc/passwd file. On most Linux systems, only the root account has the ability to read the
+contents of the shadow file.</p>
+
+<p><strong>Step 1: View the /etc/passwd file. Open a terminal and type the following command</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>user@a8d078387d02:~<span class="nv">$ </span><span class="nb">cat</span> /etc/passwd  
+</code></pre></div></div>
+
+<p>Each entry is the password information for each user (or user account) of the system. For example:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>root:</th>
+      <th>x:</th>
+      <th>0:</th>
+      <th>0:</th>
+      <th>root:</th>
+      <th>/root:</th>
+      <th>/bin/bash</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Username</td>
+      <td>password</td>
+      <td>User ID</td>
+      <td>Group ID</td>
+      <td>User ID info</td>
+      <td>Home Directory</td>
+      <td>Command/shell</td>
+    </tr>
+  </tbody>
+</table>
+
+<blockquote class="checklist">
+  <h2 id="checklist">Checklist</h2>
+  <ul>
+    <li><strong>Username: it should be between 1 and 32 characters in length.</strong></li>
+    <li><strong>Password</strong>: an ‘x’ character indicates that encrypted password is stored in /etc/shadow file.</li>
+    <li><strong>User ID (UID)</strong>: Each user must be assigned a user ID (UID). UID 0 (zero) is reserved for root and UIDs
+1-99 are reserved for other predefined accounts. Further UID 100-999 are reserved by system for
+administrative and system accounts/groups.</li>
+    <li><strong>Group ID (GID)</strong>:The primary group ID (stored in /etc/group file)</li>
+    <li><strong>User ID Info</strong>: The comment field. It allows you to add extra information about the users such as user’s
+full name, phone number etc.</li>
+    <li><strong>Home directory</strong>: The absolute path to the directory the user will be in when they log in.</li>
+    <li><strong>Command/shell</strong>: The absolute path of a command or shell (/bin/bash).</li>
+  </ul>
+</blockquote>
+
+<div class="output highlighter-rouge"><div class="highlight"><pre class="highlight"><code> root:x:0:0:root:/root:/bin/bash  
+ daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin  
+ bin:x:2:2:bin:/bin:/usr/sbin/nologin  
+ sys:x:3:3:sys:/dev:/usr/sbin/nologin  
+ sync:x:4:65534:sync:/bin:/bin/sync  
+ games:x:5:60:games:/usr/games:/usr/sbin/nologin   
+ man:x:6:12:man:/var/cache/man:/usr/sbin/nologin  
+</code></pre></div></div>
+
+<p><strong>Step 2: View the permission of the passwd file using the command:</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>user@a8d078387d02:~<span class="nv">$ </span><span class="nb">ls</span> <span class="nt">-l</span> /etc/passwd
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th>-</th>
+      <th>rw-</th>
+      <th>r–</th>
+      <th>r–</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>‘-’ indicates a file  ‘d’ indicates a directory  ‘l’ indicates a link</td>
+      <td>Read, write and execute permissions for the owner of the file</td>
+      <td>Read, write and execute permissions for the members of the group owning the file</td>
+      <td>Read, write and execute permissions for other users</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="output highlighter-rouge"><div class="highlight"><pre class="highlight"><code>-rw-r--r-- 1 root root 1196 Jun 9 22:40 /etc/passwd
+</code></pre></div></div>
+
+<p><strong>Step 3: View the /etc/shadow file using the command:</strong></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>user@a8d078387d02:~<span class="nv">$ </span><span class="nb">sudo cat</span> /etc/shadow
+</code></pre></div></div>
+
+<p>Each entry is the hashed password for each user (or user account) of the system. As with the passwd
+file, each field in the shadow file is also separated with “:” colon characters, and are as follows:</p>
+<div class="output highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root:$6$OCtu.M/v$fpnhbjkpA4S29lKZ2TzRsl6ArWyvu9eIfWfC0H98t8OoLPokE8.d7q54cynb0BTtLgN.IlolE72npACz7Dr2p.:16983:0:99999:7:::
+</code></pre></div></div>
+
+<blockquote class="checklist">
+  <h2 id="checklist-1">Checklist</h2>
+  <ul>
+    <li><strong>Username</strong>: a direct match to the username in the /etc/passwd file.</li>
+    <li><strong>Password</strong>: encrypted password. A blank entry (eg. ::) indicates a password is not required to log in
+(usually a bad idea), and a ‘<em>’ entry (eg. :</em>:) indicates the account has been disabled. The “!” symbol
+(often called a bang) represents that fact the password has not been set. Usually password format is set to
+<strong>$id$salt$hash</strong>. The $id is the algorithm used On GNU/Linux as follows: <strong>$1$</strong> is MD5, <strong>$2a$</strong> is Blowfish,<strong>$2y$</strong> is Blowfish, <strong>$5$</strong> is SHA-256, <strong>$6$</strong> is SHA-512</li>
+    <li><strong>Last change</strong>: the number of days (since January 1, 1970) since the password was last changed.</li>
+    <li><strong>Min</strong>: the minimum number of days required between password changes. 0 indicates it may be changed at
+any time.</li>
+    <li><strong>Max</strong>: the number of days after which password must be changed. 99999 indicates user can keep his or her
+password unchanged for many, many years.</li>
+    <li><strong>Warn</strong>: the number of days to warn user of an expiring password (7 for a full week)</li>
+    <li><strong>Inactive</strong>: the number of days after password expires that account is disabled</li>
+    <li><strong>Expire</strong>: the number of days since January 1, 1970 that an account has been disabled</li>
+    <li><strong>A reserved field for possible future use</strong></li>
+  </ul>
+</blockquote>
+<div class="output highlighter-rouge"><div class="highlight"><pre class="highlight"><code>user:$6$D9fII/Dc$mKjHYzIZBqxQJo3RebqBrwha2tXCBTyTyhPfClsRTxb.IxnGkpOJqqeqYHPLELr.vIln/Ctc/BecBxqxobjXt.:18060:0:99999:7:::
+</code></pre></div></div>
+
+<p><strong>Step4: Create a new user named alice in the command:</strong></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>user@a8d078387d02:~<span class="nv">$ </span><span class="nb">sudo </span>useradd alice  
+</code></pre></div></div>
+
+<p><strong>Step 5: Create a new user named bob using the command:</strong></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>user@a8d078387d02:~<span class="nv">$ </span><span class="nb">sudo </span>useradd bob
+</code></pre></div></div>
+
+<p><strong>Step 6: Now, view the changes made to the passwd file:</strong></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>user@a8d078387d02:~<span class="nv">$ </span><span class="nb">cat</span> /etc/passwd
+</code></pre></div></div>
+
+<div class="output highlighter-rouge"><div class="highlight"><pre class="highlight"><code>user:x:1000:1000::/home/user:/bin/bash
+alice:x:1001:1001::/home/alice:/bin/sh
+bob:x:1002:1002::/home/bob:/bin/sh
+</code></pre></div></div>
+
+<p><strong>Step 7: Set alice’s password to apw123 using the following command:</strong></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>user@a8d078387d02:~<span class="nv">$ </span><span class="nb">sudo </span>passwd alice  
+Enter new UNIX password:   
+Retype new UNIX password:  
+</code></pre></div></div>
+
+<p><strong>Step 8: Set bob’s password to bpw123 using the command:</strong></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>user@a8d078387d02:~<span class="nv">$ </span><span class="nb">sudo </span>passwd bob  
+Enter new UNIX password:   
+Retype new UNIX password: 
+</code></pre></div></div>
+
+<p><strong>Step 9: Examine the alterations to the shadow file by typing the following:</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>user@a8d078387d02:~<span class="nv">$ </span><span class="nb">sudo tail</span> /etc/shadow
+</code></pre></div></div>
+
+<div class="output highlighter-rouge"><div class="highlight"><pre class="highlight"><code>user:$6$0nkEXGhf$aXpApOjg0PrBxGjky/xqbDEOv7cxay9QPrZYWfKGGEpqQThQFxBQiK0ZIs4cPl4WC0IF4zKLXFbv2T5vk/th41:18060:0:99999:7:::  
+alice:$6$wnYYKvPY$nfUYRvPmYdTF74QY.1hx/wIXiVfphnr79RCM5X.MXlWzeRWkk8DeS/7oheWZr.pCxmxvNNCn7VfQsniFCN6ly.:18060:0:99999:7:::  
+bob:$6$PJbXq1eB$AEUNNCc9tbG/l5OxbvRb4todLOIdI2nJXWHuq9HcpgFQSDDASnKMj.v.FfA40byxYUiiPfnKGNctPgkzu4NWB/:18060:0:99999:7:::  
+</code></pre></div></div>
+
+<h2 id="cracking-hashes-and-rainbow-table">Cracking Hashes and Rainbow Table</h2>
+<p>Although the hashing algorithms cannot be reversed, password hashes could be cracked. Hackers
+can generate hashes from a dictionary of strings that are commonly used as passwords. If hackers
+gain access to a database of hashed passwords, they can calculate the hash code for each string in
+the database and match it with the current hash code. If one in the database matches, the plaintext
+password of that hash is known. This is so-called brute force dictionary attack.</p>
+
+<p>The brute force cracking described above is very time-consuming for calculating the hash code for
+every string in the database. The opposite way is to pre-calculate all the hash codes for the strings
+in the database and store the mapping of the hash codes to the strings. Then, hackers just need to
+look up a hash in the mapping table to find the password. However, this method requires too much
+space considering the large volume of strings that could be used as passwords. Considering the
+time-memory tradeoff, “rainbow table” is a better method that takes a place in between. It is a pre-
+commutated lookup table, but sacrifice hash cracking speed to make the lookup tables smaller.</p>
+
+<h3 id="task-2-simple-password-cracking">Task 2: Simple Password Cracking</h3>
+<p>There are some online cracking tools. For example, <strong>CrackStation (https://crackstation.net/)</strong> is a
+online websites for cracking simple password hashes.</p>
+
+<p>Please use the CrackStation to crack the following password hashes:<br />
+<strong>Hash 1: 6384E2B2184BCBF58ECCF10CA7A6563C</strong><br />
+What is the password? What hash algorithm is used?</p>
+
+<p><strong>Hash 2:4E40E8FFE0EE32FA53E139147ED559229A5930F89C2204706FC174BEB36210B3</strong><br />
+What is the password? What hash algorithm is used?</p>
+
+<p><strong>Hash 3: 5994F091C5CBC05EE2DF38DA2C54EA5BE663D54E</strong><br />
+What is the password? What hash algorithm is used?</p>
+
+<h3 id="salt">Salt</h3>
+
+<p>Rainbow tables reply on the assumption that each password is hashed in the exact the same way.
+To defeat rainbow tables, “salt” is invented to randomize the hash for each password. Using salt,
+when the same password is hashed twice, two different hash codes will be generated. Salt is usually
+stored together with hash code in the user account file.</p>
+
+<h3 id="task-3-using-john-the-ripper-for-password-cracking">Task 3: Using John the Ripper for Password Cracking</h3>
+<p>John the Ripper is one of the well-known fast password cracking tool that can crack passwords
+through a dictionary attack or through the use of brute force. It can be downloaded free at
+www.openwall.com/john/.</p>
+
+<p><strong>Step 1: Type the following command to attempt to crack the passwords with john:</strong></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>user@a8d078387d02:~<span class="nv">$ </span><span class="nb">sudo </span>john /etc/shadow  
+</code></pre></div></div>
+
+<div class="output highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Created directory: /root/.john  
+Loaded 3 password hashes with 3 different salts (crypt, generic crypt(3) [?/64])  
+Press 'q' or Ctrl-C to abort, almost any other key for status  
+user             (user)  
+1g 0:00:00:17 0% 2/3 0.05675g/s 386.4p/s 441.0c/s 441.0C/s francine..me  
+Use the "--show" option to display all of the cracked passwords reliably  
+Session aborted  
+</code></pre></div></div>
+
+<p><strong>Step 2: Can you crack the following passwords?</strong></p>
+
+<p>emiller:3e05v.ztZ8LNE:15652:0:99999:7:::</p>
+
+<p>tanderson:$1$AqW8SRi1$Dd0m3hFyOI276/IHinecr0:15652:0:99999:7:::</p>
+
+<p>awilliams:mQK2Y4hWq0SvY:15652:0:99999:7:::</p>
+
+<p>mdavis:$5$i3uY6Gfp$ywzsyCNRs7kbKbN7Ad0SnGR7P6bVmMQ8iJ7008mrGHC:156
+52:0:99999:7:::</p>
+
+<p>djameson:$6$iimf1wnL$T/0zG89BxF.qKzMyX7BZJCSye5x7wIQxox5dMMwWPdvpz
+FMOs2YkknqHdMbbdxyBN7NNNBnAh/d7YY2fRRV3k0:15652:0:99999:7:::</p>
+
+<p><strong>Open a terminal and type</strong></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>user@a8d078387d02:~<span class="nv">$ </span>gedit hashfile1.txt  
+</code></pre></div></div>
+
+<p><strong>Check the contents of hashfile1.txt</strong></p>
+
+<p><strong>Step 3: Open a terminal, and use john to crack the passwords</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>user@a8d078387d02:~<span class="nv">$ </span>john hashfile1.txt  
+</code></pre></div></div>
+
+<div class="output highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Created directory: /home/user/.john  
+Warning: only loading hashes of type "descrypt", but also saw type "md5crypt"  
+Use the "--format=md5crypt" option to force loading hashes of that type instead  
+Warning: only loading hashes of type "descrypt", but also saw type "crypt"  
+Use the "--format=crypt" option to force loading hashes of that type instead  
+Loaded 2 password hashes with 2 different salts (descrypt, traditional crypt(3) [DES 128/128 SSE2-16])  
+Press 'q' or Ctrl-C to abort, almost any other key for status  
+qwerty           (awilliams)  
+iloveyou         (emiller)  
+2g 0:00:00:00 100% 2/3 100.0g/s 132300p/s 138700c/s 138700C/s 123456..marley  
+Use the "--show" option to display all of the cracked passwords reliably  
+Session completed  
+</code></pre></div></div>
+
+<p><strong>Tip: After running john, you can check out the cracked password at any time using the
+command:</strong></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>user@a8d078387d02:~<span class="nv">$ </span>john <span class="nt">--show</span> hashfile1.txt  
+</code></pre></div></div>
+
+<div class="output highlighter-rouge"><div class="highlight"><pre class="highlight"><code>emiller:iloveyou:15652:0:99999:7:::  
+awilliams:qwerty:15652:0:99999:7:::
+Warning: hash encoding string length 99, type id $6  
+appears to be unsupported on this system; will not load such hashes.  
+  
+2 password hashes cracked, 2 left  
+</code></pre></div></div>
+
+<p><strong>Step 4: Are there any remaining password to be cracked? You may get the following warnings:</strong></p>
+<blockquote class="callout">
+  <h2 id="warning">Warning</h2>
+
+  <p>only loading hashes of type “des”, but also saw type “md5”</p>
+
+  <p>Use the “–format=md5” option to force loading hashes of that type instead</p>
+
+  <p>only loading hashes of type “des”, but also saw type “crypt”</p>
+
+  <p>Use the “–format=crypt” option to force loading hashes of that type instead</p>
+
+  <p><strong>It suggests us to specify the hash format.<br />
+We can use the following commands to specify the format option and run john again:</strong></p>
+</blockquote>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>user@a8d078387d02:~<span class="nv">$ </span>john <span class="nt">--format</span><span class="o">=</span>crypt hashfile1.txt   
+</code></pre></div></div>
+
+<blockquote class="callout">
+  <h2 id="warning-1">Warning</h2>
+  <p>Since John the Ripper will brute force the passwords, it might take a few minutes until the passwords are being cracked.</p>
+</blockquote>
+
+<p><strong>You can use the command to check the cracked passwords at this moment:</strong></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>user@a8d078387d02:~<span class="nv">$ </span>john <span class="nt">--show</span> hashfile1.txt
+</code></pre></div></div>
+
+<p>What are the passwords cracked?</p>
+<div class="output highlighter-rouge"><div class="highlight"><pre class="highlight"><code>emiller:iloveyou:15652:0:99999:7:::  
+tanderson:password:15652:0:99999:7:::  
+awilliams:qwerty:15652:0:99999:7:::  
+mdavis:blink182:156 52:0:99999:7:::  
+djameson:whatever:15652:0:99999:7:::  
+  
+5 password hashes cracked, 0 left  
+</code></pre></div></div>
+
+<blockquote class="discussion">
+  <h2 id="post-task-questions">Post-Task Questions</h2>
+  <p>Question 1 (4 points): What file in Linux store the names of the user accounts? What file stores the
+users’ password?</p>
+
+  <p>Question 2 (3 points): We observed that salts are stored together with hash codes, and are not kept as
+secrets. Why?</p>
+
+  <p>Question 3 (3 points): Is there any risk if the same salt is reused for several hashes on a user?</p>
+
+</blockquote>
+
+
+
+<blockquote class="keypoints">
+  <h2>Key Points</h2>
+  <ul>
+    
+    <li><p>Directions.pdf can be opened using Firefox.</p>
+</li>
+    
+    <li><p>It is best to copy and paste the hashed passwords in Task 2.</p>
+</li>
+    
+    <li><p>hashfile1.txt is created for user’s convenience in the home directory.</p>
+</li>
+    
+  </ul>
+</blockquote>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="row">
+  <div class="col-xs-1">
+    <h3 class="text-left">
+      
+      <a href="../"><span class="glyphicon glyphicon-menu-up" aria-hidden="true"></span><span class="sr-only">lesson home</span></a>
+      
+    </h3>
+  </div>
+  <div class="col-xs-10">
+    
+  </div>
+  <div class="col-xs-1">
+    <h3 class="text-right">
+      
+      <a href="../02-rsa/index.html"><span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span><span class="sr-only">next episode</span></a>
+      
+    </h3>
+  </div>
+</div>
+
+
+      
+      
+
+
+
+
+
+
+<footer>
+  <div class="row">
+    <div class="col-md-6 copyright" align="left">
+	
+	Licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC-BY 4.0</a> 2018–2019
+	by <a href="https://carpentries.org/">The Carpentries</a>
+        <br>
+        Licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC-BY 4.0</a> 2016–2018
+	by <a href="https://software-carpentry.org">Software Carpentry Foundation</a>
+	
+    </div>
+    <div class="col-md-6 help-links" align="right">
+	
+	<a href="/edit//_episodes/01-passwordcracking.md">Edit on GitHub</a>
+	
+	/
+	<a href="/blob//CONTRIBUTING.md">Contributing</a>
+	/
+	<a href="/">Source</a>
+	/
+	<a href="/blob//CITATION">Cite</a>
+	/
+	<a href="mailto:rkalyanapurdue@gmail.com">Contact</a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12" align="center">
+      Using <a href="https://github.com/carpentries/styles/">The Carpentries style</a>
+      version <a href="https://github.com/carpentries/styles/releases/tag/v9.5.3">9.5.3</a>.
+    </div>
+  </div>
+</footer>
+
+      
+    </div>
+    
+<script src="../assets/js/jquery.min.js"></script>
+<script src="../assets/js/bootstrap.min.js"></script>
+<script src="../assets/js/lesson.js"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-37305346-2', 'auto');
+  ga('send', 'pageview');
+</script>
+
+  </body>
+</html>

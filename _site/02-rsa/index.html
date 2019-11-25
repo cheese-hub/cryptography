@@ -1,0 +1,664 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="last-modified" content="2019-10-09 15:51:28 -0500">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- meta "search-domain" used for google site search function google_search() -->
+    <meta name="search-domain" value="">
+    <link rel="stylesheet" type="text/css" href="../assets/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="../assets/css/bootstrap-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../assets/css/lesson.css" />
+    <link rel="stylesheet" type="text/css" href="../assets/css/syntax.css" />
+
+    
+
+
+
+    <!-- Favicons for everyone -->
+    <link rel="apple-touch-icon-precomposed" sizes="57x57" href="../assets/favicons/swc/apple-touch-icon-57x57.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/favicons/swc/apple-touch-icon-114x114.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/favicons/swc/apple-touch-icon-72x72.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/favicons/swc/apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="60x60" href="../assets/favicons/swc/apple-touch-icon-60x60.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="../assets/favicons/swc/apple-touch-icon-120x120.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="76x76" href="../assets/favicons/swc/apple-touch-icon-76x76.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../assets/favicons/swc/apple-touch-icon-152x152.png" />
+    <link rel="icon" type="image/png" href="../assets/favicons/swc/favicon-196x196.png" sizes="196x196" />
+    <link rel="icon" type="image/png" href="../assets/favicons/swc/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/png" href="../assets/favicons/swc/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="../assets/favicons/swc/favicon-16x16.png" sizes="16x16" />
+    <link rel="icon" type="image/png" href="../assets/favicons/swc/favicon-128.png" sizes="128x128" />
+    <meta name="application-name" content="Software Carpentry - Network Security"/>
+    <meta name="msapplication-TileColor" content="#FFFFFF" />
+    <meta name="msapplication-TileImage" content="../assets/favicons/swc/mstile-144x144.png" />
+    <meta name="msapplication-square70x70logo" content="../assets/favicons/swc/mstile-70x70.png" />
+    <meta name="msapplication-square150x150logo" content="../assets/favicons/swc/mstile-150x150.png" />
+    <meta name="msapplication-wide310x150logo" content="../assets/favicons/swc/mstile-310x150.png" />
+    <meta name="msapplication-square310x310logo" content="../assets/favicons/swc/mstile-310x310.png" />
+
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+    <title>Network Security: RSA Public-Key Encryption and Signature Lab</title>
+  </head>
+  <body>
+
+    
+
+
+<div class="panel panel-default life-cycle">
+  <div id="life-cycle" class="panel-body pre-alpha">
+    This lesson is still being designed and assembled (Pre-Alpha version)
+  </div>
+</div>
+
+
+
+
+
+    <div class="container">
+      
+
+
+
+
+
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+
+      
+      
+      <a href="https://software-carpentry.org" class="pull-left">
+        <img class="navbar-logo" src="../assets/img/swc-icon-blue.svg" alt="Software Carpentry logo" />
+      </a>
+      
+
+      
+      <a class="navbar-brand" href="../index.html">Home</a>
+
+    </div>
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+
+	
+        <li><a href="../CODE_OF_CONDUCT.html">Code of Conduct</a></li>
+
+        
+	
+        <li><a href="../setup.html">Setup</a></li>
+
+        
+        <li class="dropdown">
+          <a href="../" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Episodes <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+            <li><a href="../01-passwordcracking/index.html">Password Hashing and Cracking</a></li>
+            
+            <li><a href="../02-rsa/index.html">RSA Public-Key Encryption and Signature Lab</a></li>
+            
+            <li><a href="../03-pki/index.html">Public Key Infrastructure Lab</a></li>
+            
+	    <li role="separator" class="divider"></li>
+            <li><a href="../aio.html">All in one page (Beta)</a></li>
+          </ul>
+        </li>
+	
+
+	
+	
+        <li class="dropdown">
+          <a href="../" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Extras <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="../reference.html">Reference</a></li>
+            
+            <li><a href="../about/index.html">About</a></li>
+            
+            <li><a href="../discuss/index.html">Discussion</a></li>
+            
+            <li><a href="../figures/index.html">Figures</a></li>
+            
+            <li><a href="../guide/index.html">Instructor Notes</a></li>
+            
+          </ul>
+        </li>
+	
+
+	
+        <li><a href="../LICENSE.html">License</a></li>
+	
+	<li><a href="/edit//_episodes/02-rsa.md">Improve this page <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></li>
+	
+      </ul>
+      <form class="navbar-form navbar-right" role="search" id="search" onsubmit="google_search(); return false;">
+        <div class="form-group">
+          <input type="text" id="google-search" placeholder="Search..." aria-label="Google site search">
+        </div>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="row">
+  <div class="col-xs-1">
+    <h3 class="text-left">
+      
+      <a href="../01-passwordcracking/index.html"><span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span><span class="sr-only">previous episode</span></a>
+      
+    </h3>
+  </div>
+  <div class="col-xs-10">
+    
+    <h3 class="maintitle"><a href="../">Network Security</a></h3>
+    
+  </div>
+  <div class="col-xs-1">
+    <h3 class="text-right">
+      
+      <a href="../03-pki/index.html"><span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span><span class="sr-only">next episode</span></a>
+      
+    </h3>
+  </div>
+</div>
+
+<article>
+<div class="row">
+  <div class="col-md-1">
+  </div>
+  <div class="col-md-10">
+    <h1 class="maintitle">RSA Public-Key Encryption and Signature Lab</h1>
+  </div>
+  <div class="col-md-1">
+  </div>
+</div>
+
+
+<blockquote class="objectives">
+  <h2>Overview</h2>
+
+  <div class="row">
+    <div class="col-md-3">
+      <strong>Teaching:</strong> 30 min
+      <br/>
+      <strong>Exercises:</strong> 60 min
+    </div>
+    <div class="col-md-9">
+      <strong>Questions</strong>
+      <ul>
+	
+	<li><p>What is RSA?</p>
+</li>
+	
+	<li><p>How is RSA used in Computer security?</p>
+</li>
+	
+	<li><p>How is RSA used to encrypt and decrypt messages?</p>
+</li>
+	
+	<li><p>How is RSA used to sign and verify signatures?</p>
+</li>
+	
+      </ul>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-3">
+    </div>
+    <div class="col-md-9">
+      <strong>Objectives</strong>
+      <ul>
+	
+	<li><p>Follow instructions to successfully encrypt and decrypt some messages, sign and verify signatures.</p>
+</li>
+	
+      </ul>
+    </div>
+  </div>
+
+</blockquote>
+
+<h2 id="rsa-public-key-encryption-and-signature-lab">RSA Public-Key Encryption and Signature Lab</h2>
+<h3 id="acknowledgement">Acknowledgement</h3>
+<p>This lab was developed with the help of Shatadiya Saha, a graduate student in the Department of Electrical Engineering and Computer Science at Syracuse University.<br />
+This lab was originally designed by <a href="http://www.cis.syr.edu/~wedu/seed/Labs_16.04/Crypto/Crypto_RSA/">SEEDLabs</a> and Dr. Wenliang Du.</p>
+<h3 id="introduction">Introduction</h3>
+
+<p>RSA (RivestShamirAdleman) is one of the first public-key cryptosystems and is widely used for secure communication. The RSA algorithm first generates two large random prime numbers, and then use them to generate public and private key pairs, which can be used to do encryption, decryption, digital signature generation, and digital signature verification. The RSA algorithm is built upon number theories, and it can be quite easily implemented with the support of libraries.
+The learning objective of this lab is for students to gain hands on experiences on the RSA algorithm. From lectures, students should have learned the theoretic part of the RSA algorithm, so they know mathematically how to generate public/private keys and how to perform encryption/decryption and signature generation/verification. This lab enhances student’s understanding of RSA by requiring them to go through every essential step of the RSA algorithm on actual numbers, so they can apply the theories learned from the class. Essentially, students will be implementing the RSA algorithm using the C program language. The lab covers the following security-related topics:</p>
+<ul>
+  <li>Public-key cryptography</li>
+  <li>The RSA algorithm and key generation</li>
+  <li>Big number calculation</li>
+  <li>Encryption and Decryption using RSA</li>
+  <li>Digital signature</li>
+  <li>X.509 certificate</li>
+</ul>
+
+<h3 id="background">Background</h3>
+
+<p>The RSA algorithm involves computations on large numbers. These computations cannot be directly conducted using simple arithmetic operators in programs, because those operators can only operate on primitive data types, such as 32-bit integer and 64-bit long integer types. The numbers involved in the RSA algorithms are typically more than 512 bits long. For example, to multiple two 32-bit integer numbers a and b, we just need to use ‘a∗b’ in our program. However, if they are big numbers, we cannot do that any more; instead, we need to use an algorithm (i.e., a function) to compute their products.
+There are several libraries that can perform arithmetic operations on integers of arbitrary size. In this lab, we will use the Big Number library provided by <em>openssl</em>. To use this library, we will define each big number as a <em>BIGNUM</em> type, and then use the APIs provided by the library for various operations, such as addition, multiplication, exponentiation, modular operations, etc.</p>
+
+<h3 id="bignum-apis">BIGNUM APIs</h3>
+
+<p>All the big number APIs can be found from https://linux.die.net/man/3/bn. In the following, we describe some of the APIs that are needed for this lab.</p>
+
+<ul>
+  <li>Some of the library functions requires temporary variables. Since dynamic memory allocation to create BIGNUMs is quite expensive when used in conjunction with repeated subroutine calls, a BN_CTX structure is created to hold BIGNUM temporary variables used by library functions. We need to create such a structure, and pass it to the functions that requires it.</li>
+</ul>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="n">BN_CTX</span> <span class="o">*</span><span class="n">ctx</span> <span class="o">=</span> <span class="n">BN_CTX_new</span><span class="p">()</span>
+</code></pre></div></div>
+<ul>
+  <li>Initialize a BIGNUM variable</li>
+</ul>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="n">BIGNUM</span> <span class="o">*</span><span class="n">a</span> <span class="o">=</span> <span class="n">BN_new</span><span class="p">()</span>
+</code></pre></div></div>
+<ul>
+  <li>There are a number of ways to assign a value to a BIGNUM variable.</li>
+</ul>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Assign a value from a decimal number string</span>
+<span class="n">BN_dec2bn</span><span class="p">(</span><span class="o">&amp;</span><span class="n">a</span><span class="p">,</span> <span class="s">"12345678901112231223"</span><span class="p">);</span>
+<span class="c1">// Assign a value from a hex number string</span>
+<span class="n">BN_hex2bn</span><span class="p">(</span><span class="o">&amp;</span><span class="n">a</span><span class="p">,</span> <span class="s">"2A3B4C55FF77889AED3F"</span><span class="p">);</span>
+<span class="c1">// Generate a random number of 128 bits</span>
+<span class="n">BN_rand</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+<span class="c1">// Generate a random prime number of 128 bits</span>
+<span class="n">BN_generate_prime_ex</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</code></pre></div></div>
+<ul>
+  <li>Print out a big number.</li>
+</ul>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">printBN</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">msg</span><span class="p">,</span> <span class="n">BIGNUM</span> <span class="o">*</span> <span class="n">a</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="c1">// Convert the BIGNUM to number string</span>
+<span class="kt">char</span> <span class="o">*</span> <span class="n">number_str</span> <span class="o">=</span> <span class="n">BN_bn2dec</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+<span class="c1">// Print out the number string</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">"%s %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">number_str</span><span class="p">);</span>
+<span class="c1">// Free the dynamically allocated memory</span>
+   <span class="n">OPENSSL_free</span><span class="p">(</span><span class="n">number_str</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<ul>
+  <li>Compute <em>res = a−b</em> and <em>res = a+b</em>:</li>
+</ul>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">BN_sub</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">);</span>
+<span class="n">BN_add</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">);</span>
+</code></pre></div></div>
+<ul>
+  <li>Compute <em>res = a ∗ b</em>. It should be noted that a BN_CTX structure is need in this API.</li>
+</ul>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">BN_mul</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">ctx</span><span class="p">)</span>
+</code></pre></div></div>
+<ul>
+  <li>Compute <em>res = a∗b</em> mod n:</li>
+</ul>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">BN_mod_mul</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">ctx</span><span class="p">)</span>
+</code></pre></div></div>
+<ul>
+  <li>Compute <em>res = a^c mod n</em>:</li>
+</ul>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">BN_mod_exp</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">ctx</span><span class="p">)</span>
+</code></pre></div></div>
+<ul>
+  <li>Compute modular inverse, i.e., given <em>a</em>, find <em>b</em>, such that <em>a ∗ b mod n = 1</em>. The value <em>b</em> is called the inverse of <em>a</em>, with respect to modular <em>n</em>.</li>
+</ul>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">BN_mod_inverse</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">ctx</span><span class="p">);</span>
+</code></pre></div></div>
+<h3 id="a-complete-example">A Complete Example</h3>
+<p>We show a complete example in the following. In this example, we initialize three BIGNUM variables, <em>a</em>, <em>b</em>,and <em>n</em>; we then compute <em>a∗b</em> and <em>(ab mod n)</em>.</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/* bn_sample.c */</span>
+<span class="cp">#include &lt;stdio.h&gt;
+#include &lt;openssl/bn.h&gt;
+#define NBITS 256
+</span><span class="kt">void</span> <span class="nf">printBN</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">msg</span><span class="p">,</span> <span class="n">BIGNUM</span> <span class="o">*</span> <span class="n">a</span><span class="p">)</span>
+<span class="p">{</span>
+   <span class="cm">/* Use BN_bn2hex(a) for hex string
+    * Use BN_bn2dec(a) for decimal string */</span>
+   <span class="kt">char</span> <span class="o">*</span> <span class="n">number_str</span> <span class="o">=</span> <span class="n">BN_bn2hex</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+   <span class="n">printf</span><span class="p">(</span><span class="s">"%s %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">number_str</span><span class="p">);</span>
+   <span class="n">OPENSSL_free</span><span class="p">(</span><span class="n">number_str</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">main</span> <span class="p">()</span>
+<span class="p">{</span>
+  <span class="n">BN_CTX</span> <span class="o">*</span><span class="n">ctx</span> <span class="o">=</span> <span class="n">BN_CTX_new</span><span class="p">();</span>
+  <span class="n">BIGNUM</span> <span class="o">*</span><span class="n">a</span> <span class="o">=</span> <span class="n">BN_new</span><span class="p">();</span>
+  <span class="n">BIGNUM</span> <span class="o">*</span><span class="n">b</span> <span class="o">=</span> <span class="n">BN_new</span><span class="p">();</span>
+  <span class="n">BIGNUM</span> <span class="o">*</span><span class="n">n</span> <span class="o">=</span> <span class="n">BN_new</span><span class="p">();</span>
+  <span class="n">BIGNUM</span> <span class="o">*</span><span class="n">res</span> <span class="o">=</span> <span class="n">BN_new</span><span class="p">();</span>
+<span class="c1">// Initialize a, b, n</span>
+  <span class="n">BN_generate_prime_ex</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">NBITS</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+  <span class="n">BN_dec2bn</span><span class="p">(</span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span> <span class="s">"273489463796838501848592769467194369268"</span><span class="p">);</span>
+  <span class="n">BN_rand</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">NBITS</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+<span class="c1">// res = a*b</span>
+  <span class="n">BN_mul</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">ctx</span><span class="p">);</span>
+  <span class="n">printBN</span><span class="p">(</span><span class="s">"a * b = "</span><span class="p">,</span> <span class="n">res</span><span class="p">);</span>
+<span class="c1">// res = aˆb mod n</span>
+  <span class="n">BN_mod_exp</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">ctx</span><span class="p">);</span>
+  <span class="n">printBN</span><span class="p">(</span><span class="s">"aˆc mod n = "</span><span class="p">,</span> <span class="n">res</span><span class="p">);</span>
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="compilation">compilation</h4>
+<p>We can use the following command to compile bn_sample.c (the character after - is the letter l, not the number 1; it tells the compiler to use the crypto library).</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>gcc bn_sample.c <span class="nt">-lcrypto</span>
+</code></pre></div></div>
+
+<h3 id="lab-tasks">Lab Tasks</h3>
+<p>To avoid mistakes, please avoid manually typing the numbers used in the lab tasks. Instead, copy and paste the numbers from this instruction.</p>
+
+<h3 id="task-1-deriving-the-private-key">Task 1: Deriving the Private Key</h3>
+<p>Let <em>p</em>, <em>q</em>, and <em>e</em> be three prime numbers. Let <em>n = p∗q</em>. We will use <em>(e, n)</em> as the public key. Please calculate the private key <em>d</em>. The hexadecimal values of <em>p</em>, <em>q</em>, and <em>e</em> are listed in the following. It should be noted that although p and q used in this task are quite large numbers, they are not large enough to be secure. We intentionally make them small for the sake of simplicity. In practice, these numbers should be at least 512 bits long (the one used here are only 128 bits).</p>
+
+<div class="source highlighter-rouge"><div class="highlight"><pre class="highlight"><code>p = F7E75FDC469067FFDC4E847C51F452DF
+q = E85CED54AF57E53E092113E62F436F4F
+e = 0D88C3
+</code></pre></div></div>
+
+<h3 id="task-2-encrypting-a-message">Task 2: Encrypting a Message</h3>
+<p>Let <em>(e, n)</em> be the public key. Please encrypt the message “A top secret!” (the quotations are not included). We need to convert this ASCII string to a hex string, and then convert the hex string to a <em>BIGNUM</em> using the hex to bn API, <em>BN_hex2bn()</em>. The following python command can be used to convert a plain ASCII string to a hex string.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="nv">$ </span>python  <span class="nt">-c</span> ’print<span class="o">(</span><span class="s2">"A top secret!"</span>.encode<span class="o">(</span><span class="s2">"hex"</span><span class="o">))</span>’
+   4120746f702073656372657421
+</code></pre></div></div>
+
+<p>The public keys are listed in the followings (hexadecimal). We also provide the private key <em>d</em> to help you verify your encryption result.</p>
+
+<div class="source highlighter-rouge"><div class="highlight"><pre class="highlight"><code>n = DCBFFE3E51F62E09CE7032E2677A78946A849DC4CDDE3A4D0CB81629242FB1A5
+e = 010001 (this hex value equals to decimal 65537)
+M = A top secret!
+d = 74D806F9F3A62BAE331FFE3F0A68AFE35B3D2E4794148AACBC26AA381CD7D30D
+</code></pre></div></div>
+
+<h3 id="task-3-decrypting-a-message">Task 3: Decrypting a Message</h3>
+<p>The public/private keys used in this task are the same as the ones used in Task 2. Please decrypt the following cipher text <em>C</em>, and convert it back to a plain ASCII string.</p>
+
+<div class="source highlighter-rouge"><div class="highlight"><pre class="highlight"><code>C = 8C0F971DF2F3672B28811407E2DABBE1DA0FEBBBDFC7DCB67396567EA1E2493F
+</code></pre></div></div>
+
+<p>You can use the following python command to convert a hex string back to a plain ASCII string.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>python  <span class="nt">-c</span> ’print<span class="o">(</span><span class="s2">"4120746f702073656372657421"</span>.decode<span class="o">(</span><span class="s2">"hex"</span><span class="o">))</span>’
+A top secret!
+</code></pre></div></div>
+
+<h3 id="task-4-signing-a-message">Task 4: Signing a Message</h3>
+<p>The public/private keys used in this task are the same as the ones used in Task 2. Please generate a signature for the following message (please directly sign this message, instead of signing its hash value):</p>
+<div class="source highlighter-rouge"><div class="highlight"><pre class="highlight"><code> M = I owe you $2000.
+</code></pre></div></div>
+
+<p>Please make a slight change to the message M, such as changing $2000 to $3000, and sign the modified message. Compare both signatures and describe what you observe.</p>
+
+<h3 id="task-5-verifying-a-signature">Task 5: Verifying a Signature</h3>
+<p>Bob receives a message M = “Launch a missile.” from Alice, with her signature S. We know that Alice’s public key is (e, n). Please verify whether the signature is indeed Alice’s or not. The public key and signature (hexadecimal) are listed in the following:</p>
+
+<div class="source highlighter-rouge"><div class="highlight"><pre class="highlight"><code>M = Launch a missile.
+S = 643D6F34902D9C7EC90CB0B2BCA36C47FA37165C0005CAB026C0542CBDB6802F
+e = 010001 (this hex value equals to decimal 65537)
+n = AE1CD4DC432798D933779FBD46C6E1247F0CF1233595113AA51B450F18116115
+</code></pre></div></div>
+
+<p>Suppose that the signature is corrupted, such that the last byte of the signature changes from <em>2F</em> to <em>3F</em>, i.e, there is only one bit of change. Please repeat this task, and describe what will happen to the verification process.</p>
+
+<h3 id="task-6-manually-verifying-an-x509-certificate">Task 6: Manually Verifying an X.509 Certificate</h3>
+<p>In this task, we will manually verify an X.509 certificate using our program. An X.509 contains data about the public key and an issuer’s signature on the data. We will download a real X.509 certificate from a web server, get its issuer’s public key, and then use this public key to verify the signature on the certificate.</p>
+<h4 id="step-1-download-a-certificate-from-a-real-web-server">Step 1: Download a certificate from a real web server.</h4>
+<p>We used the www.example.org server in this document. Students should choose a different web server that has a different certificate than the one used in this document (it should be noted that www.example.com share the same certificate with www.example.org). We can download certificates using browsers or using the following command:</p>
+
+<div class="output highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ openssl s_client -connect www.example.org:443 -showcerts
+Certificate chain
+ 0 s:/C=US/ST=California/L=Los Angeles/O=Internet Corporation for Assigned
+     Names and Numbers/OU=Technology/CN=www.example.org
+i:/C=US/O=DigiCert Inc/OU=www.digicert.com/CN=DigiCert SHA2 High Assurance
+  Server CA
+-----BEGIN CERTIFICATE-----
+MIIF8jCCBNqgAwIBAgIQDmTF+8I2reFLFyrrQceMsDANBgkqhkiG9w0BAQsFADBw
+MQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYDVQQLExB3
+......
+wDSiIIWIWJiJGbEeIO0TIFwEVWTOnbNl/faPXpk5IRXicapqiII=
+  -----END CERTIFICATE-----
+1 s:/C=US/O=DigiCert Inc/OU=www.digicert.com/CN=DigiCert SHA2 High
+    Assurance Server CA
+  i:/C=US/O=DigiCert Inc/OU=www.digicert.com/CN=DigiCert High Assurance
+EV Root CA
+-----BEGIN CERTIFICATE-----
+MIIEsTCCA5mgAwIBAgIQBOHnpNxc8vNtwCtCuF0VnzANBgkqhkiG9w0BAQsFADBs
+MQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYDVQQLExB3
+......
+cPUeybQ=
+-----END CERTIFICATE-----
+</code></pre></div></div>
+
+<p>The result of the command contains two certificates. The subject field (the entry starting with s:) of the certificate is www.example.org, i.e., this is www.example.org’s certificate. The issuer field (the entry starting with i:) provides the issuer’s information. The subject field of the second certificate is the same as the issuer field of the first certificate. Basically, the second certificate belongs to an intermediate CA. In this task, we will use CA’s certificate to verify a server certificate.
+If you only get one certificate back using the above command, that means the certificate you get is signed by a root CA. Search for the name of the issuer and download its certificate. In the case where you get three certificates, just use the first two in this task.
+Copy and paste each of the certificate (the text between the line containing “Begin CERTIFICATE” and the line containing “END CERTIFICATE”,including these two lines) to a file. Let us call the first one <strong>c0.pem</strong> and the second one <strong>c1.pem</strong>.</p>
+
+<h4 id="step-2-extract-the-public-key-e-n-from-the-issuers-certificate">Step 2: Extract the public key (e, n) from the issuer’s certificate.</h4>
+<p>openssl provides commands to extract certain attributes from the x509 certificates. We can extract the value of <em>n</em> using <em>-modulus</em>. There is no specific command to extract <em>e</em>, but we can print out all the fields and can easily find the value of <em>e</em>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code> For modulus <span class="o">(</span>n<span class="o">)</span>:
+<span class="nv">$ </span>openssl x509 <span class="nt">-in</span> c1.pem <span class="nt">-noout</span> <span class="nt">-modulus</span>
+ Print out all the fields, find the exponent <span class="o">(</span>e<span class="o">)</span>:
+<span class="nv">$ </span>openssl x509 <span class="nt">-in</span> c1.pem <span class="nt">-text</span> <span class="nt">-noout</span>
+</code></pre></div></div>
+
+<h4 id="step-3-extract-the-signature-from-the-servers-certificate">Step 3: Extract the signature from the server’s certificate.</h4>
+<p>There is no specific openssl command to extract the signature field. However, we can print out all the fields and then copy and paste the signature block into a file.<br />
+(<strong>note: if the signature algorithm used in the certificate is not based on RSA, you can find another certificate</strong>).</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>openssl x509 <span class="nt">-in</span> c0.pem <span class="nt">-text</span> <span class="nt">-noout</span>
+</code></pre></div></div>
+
+<div class="output highlighter-rouge"><div class="highlight"><pre class="highlight"><code>...
+Signature Algorithm: sha256WithRSAEncryption
+  84:a8:9a:11:a7:d8:bd:0b:26:7e:52:24:7b:b2:55:9d:ea:30:
+  89:51:08:87:6f:a9:ed:10:ea:5b:3e:0b:c7:2d:47:04:4e:dd:
+......
+5c:04:55:64:ce:9d:b3:65:fd:f6:8f:5e:99:39:21:15:e2:71:
+aa:6a:88:82
+</code></pre></div></div>
+
+<p>We need to remove the spaces and colons from the data, so we can get a hex-string that we can feed into our program. The following command can achieve this goal. The <em>tr</em> command is a Linux utility tool for string operations. In this case, the <em>-d</em> option is used to delete “:” and “space” from the data.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">cat </span>signature | <span class="nb">tr</span> <span class="nt">-d</span> ’[:space:]:’
+84a89a11a7d8bd0b267e52247bb2559dea30895108876fa9ed10ea5b3e0bc7
+......
+5c045564ce9db365fdf68f5e99392115e271aa6a8882
+</code></pre></div></div>
+
+<h4 id="step-4-extract-the-body-of-the-servers-certificate">Step 4: Extract the body of the server’s certificate.</h4>
+<p>A Certificate Authority (CA) generates the signature for the server certificate by first computing the hash of the certificate, and then signing the hash. To verify the signature, we also need to generate the hash from a certificate. Since the hash is generated before the signature is computed, we need to exclude the signature block of the certificate when computing the hash. Finding out the part of the certificate, which is used to generate the hash is quite challenging without a good understanding of the format of the certificate.
+X.509 certificates are encoded using the ASN.1 (Abstract Syntax Notation.One) standard, so if we can parse the ASN.1 structure, we can easily extract any field from a certificate. Openssl has a command called <em>asn1parse</em>, which can be used to parse a X.509 certificate.</p>
+
+<div class="output highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ openssl asn1parse -i -in c0.pem
+    0:d=0  hl=4 l=1856 cons: SEQUENCE
+    4:d=1  hl=4 l=1576 cons:  SEQUENCE
+    8:d=2  hl=2 l=   3 cons:   cont [ 0 ]
+   10:d=3  hl=2 l=   1 prim:    INTEGER           :02
+   13:d=2  hl=2 l=  16 prim:   INTEGER           :0FD078DD48F1A2BD4D0F2BA96B6038FE
+
+.....
+ 1584:d=1  hl=2 l=  13 cons:  SEQUENCE
+ 1586:d=2  hl=2 l=   9 prim:   OBJECT            :sha256WithRSAEncryption
+ 1597:d=2  hl=2 l=   0 prim:   NULL
+ 1599:d=1  hl=4 l= 257 prim:  BIT STRING
+</code></pre></div></div>
+
+<p>The field starting from <strong>4:</strong> is the body of the certificate that is used to generate the hash; the field starting from <strong>1586</strong>: is the signature block. Their offsets are the numbers at the beginning of each lines. In our case, the certificate body is from offset 4 to 1585, while the signature block is from 1586 to the end of the file. For X.509 certificates, the starting offset is always the same (i.e., 4), but the end depends on the content length of the certificate. We can use the <em>-strparse</em> option to get the field from offset 4, which will give us the body of the certificate, excluding the signature block.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>openssl asn1parse <span class="nt">-i</span> <span class="nt">-in</span> c0.pem <span class="nt">-strparse</span> 4 <span class="nt">-out</span> c0_body.bin <span class="nt">-noout</span>
+</code></pre></div></div>
+
+<p>Once we get the body of the certificate, we can calculate its hash using the following command:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sha256sum </span>c0_body.bin
+</code></pre></div></div>
+
+<h4 id="step-5-verify-the-signature">Step 5: Verify the signature.</h4>
+<p>Now we have all the information, including the CA’s public key, the CA’s signature, and the body of the server’s certificate. We can run our own program to verify whether the signature is valid or not. Openssl does provide a command to verify the certificate for us, but students are required to use their own programs to do so.</p>
+
+
+
+<blockquote class="keypoints">
+  <h2>Key Points</h2>
+  <ul>
+    
+    <li><p>It is best to copy and paste the private keys, public keys, messages and so on from this instruction.</p>
+</li>
+    
+    <li><p>Code can be written using gedit and compiled using gcc which is available within the container.</p>
+</li>
+    
+  </ul>
+</blockquote>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="row">
+  <div class="col-xs-1">
+    <h3 class="text-left">
+      
+      <a href="../01-passwordcracking/index.html"><span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span><span class="sr-only">previous episode</span></a>
+      
+    </h3>
+  </div>
+  <div class="col-xs-10">
+    
+  </div>
+  <div class="col-xs-1">
+    <h3 class="text-right">
+      
+      <a href="../03-pki/index.html"><span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span><span class="sr-only">next episode</span></a>
+      
+    </h3>
+  </div>
+</div>
+
+
+      
+      
+
+
+
+
+
+
+<footer>
+  <div class="row">
+    <div class="col-md-6 copyright" align="left">
+	
+	Licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC-BY 4.0</a> 2018–2019
+	by <a href="https://carpentries.org/">The Carpentries</a>
+        <br>
+        Licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC-BY 4.0</a> 2016–2018
+	by <a href="https://software-carpentry.org">Software Carpentry Foundation</a>
+	
+    </div>
+    <div class="col-md-6 help-links" align="right">
+	
+	<a href="/edit//_episodes/02-rsa.md">Edit on GitHub</a>
+	
+	/
+	<a href="/blob//CONTRIBUTING.md">Contributing</a>
+	/
+	<a href="/">Source</a>
+	/
+	<a href="/blob//CITATION">Cite</a>
+	/
+	<a href="mailto:rkalyanapurdue@gmail.com">Contact</a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12" align="center">
+      Using <a href="https://github.com/carpentries/styles/">The Carpentries style</a>
+      version <a href="https://github.com/carpentries/styles/releases/tag/v9.5.3">9.5.3</a>.
+    </div>
+  </div>
+</footer>
+
+      
+    </div>
+    
+<script src="../assets/js/jquery.min.js"></script>
+<script src="../assets/js/bootstrap.min.js"></script>
+<script src="../assets/js/lesson.js"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-37305346-2', 'auto');
+  ga('send', 'pageview');
+</script>
+
+  </body>
+</html>
