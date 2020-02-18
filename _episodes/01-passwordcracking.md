@@ -246,7 +246,8 @@ Session aborted
 ~~~  
 {: .output}
 
-**Step 2: Can you crack the following passwords?**  
+**Step 2: Can you crack the following passwords?** 
+(The passwords are from a public released document of [2012 NCL competition](https://www.nationalcyberwatch.org/ncw-content/uploads/2016/03/2012_Challenge_Explanations-2-1.pdf).)
 
 emiller:3e05v.ztZ8LNE:15652:0:99999:7:::  
 
@@ -266,7 +267,7 @@ user@a8d078387d02:~$ gedit hashfile1.txt
 ~~~
 {: .language-bash}  
 
-**Check the contents of hashfile1.txt**  
+**Save the above contents to hashfile1.txt**  
 
 **Step 3: Open a terminal, and use john to crack the passwords**  
 
